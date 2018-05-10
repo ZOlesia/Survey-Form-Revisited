@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document). ready(function (){
+            $('#result').hide();
+            var socket = io(); //1
+    
+            $('form').submit(function()
+            {
+                event.preventDefault();
+                var formdata = $('form').serializeArray();
+                socket.emit('form_data', formdata)
+            });
+
+            socket.on('form_data', function(data)
+            {
+                $('#result').show();
+                console.log(data.name);
+
+                // JSON.stringify(data)
+                $('#result').html(`<h1>Results</h1><p>Your Name: ${data.name}, <br>Location: ${data.location}, <br>Language: ${data.language}, <br>Comment: ${data.comment}<br>Your lucky number is ${data.lucky}</p>`);
+            })
+
+
+        })
+    </script>
+</head>
+<body>
+    <div class="container bg-light" style="height: auto; padding-top: 25px; margin-top: 35px; width: 890px;">
+        <div id="result"></div>
+        <h1 style="margin-bottom: 30px;">Survey Form</h1>
+        <form action="" method="">
+
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Your Name..">
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label for="location" class="col-sm-2 col-form-label">Dojo Location</label>
+                <div class="col-sm-10">
+                    <select class="custom-select mr-sm-2" id="location" name="location">
+                        <option value="Seattle">Seattle</option>
+                        <option value="Boston">Boston</option>
+                        <option value="Chicago">Chicago</option>
+                        <option value="San Jose">San Jose</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="language" class="col-sm-2 col-form-label">Favorite Language</label>
+                <div class="col-sm-10">
+                    <select class="custom-select mr-sm-2" id="language" name="language">
+                        <option value="Python">Python</option>
+                        <option value="English">English</option>
+                        <option value="German">German</option>
+                        <option value="French">French</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="comment" class="col-sm-2 col-form-label">Comment(optional)</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="comment" rows="3" name="comment"></textarea>
+                </div>
+                <input type="submit" value="Submit" class="btn btn-success float-right" style="margin: 25px 0 30px 800px;">
+            </div>
+        </form>
+    </div>
+            
+
+</body>
+</html>
